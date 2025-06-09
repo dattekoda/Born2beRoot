@@ -6,7 +6,7 @@
 
 `su -`でroot userとしてログインする。
 `apt-get update -y`でそれまでダウンロードしたパッケージ情報をアップデート。
-`apt-get upgrade -y`でアップデートした情報をインストール。
+`apt-get upgrade -y`でアップデートした情報を獲得。
 `apt install sudo`でsudoをインストール。
 
 ### apt と apt-get の違い。
