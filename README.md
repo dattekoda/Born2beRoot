@@ -272,7 +272,7 @@ wall "  #Architecture: $arc
 > systemdが管理する「ジャーナルログを参照、検索するためのコマンド。従来のsyslogやmessagesのようなテキストファイルではなくバイナリ形式で保存されたログを扱う。
 
 ### `wall`コマンド
-> 現在システムにログインしている全ユーザーの端末（TTY）にメッセージを一斉送信するためのコマンドです。主にシステム管理者がメンテナンス通知や緊急告知を行う際に使われる。write allの略。
+> 現在システムにログインしている全ユーザーの端末（TTY）にメッセージを一斉送信するためのコマンド。主にシステム管理者がメンテナンス通知や緊急告知を行う際に使われる。write allの略。
 
 ## monitoring.shの設定3
  続いて、Ubuntuのshellから`ssh khanadat@127.0.0.1 -p 4242`でSSH接続をする。
@@ -293,3 +293,60 @@ VirtualBoxに戻り、`sudo visumo`からsudoersファイルを編集する。
 `sudo crontab -u root -e`でcrontabを開いて、ルールを追加する。
 crontabの最後の行に`*/10 * * * * /usr/local/bin/monitoring.sh`を追加する。
 これは10分ごとにmonitoring.shを実行するという意味。
+
+## 質問対策
+### 仮想マシンはどう動くのか？その目的は？
+> 仮想マシンは既存OS上で仮想的なハードウェア環境をソフトウェアでエミュレートして他のOSを立ち上げる仕組みです。サーバーを立ち上げる、クラウド環境を構築するベアメタル型と開発やテスト環境やや学習、検証用途として利用できるホスト型があります。前者はハードウェアを直接制御するため高速だが、導入が複雑。後者は導入が簡単だがホストOSを介してゲストを動かすので遅い。
+
+### なぜ、DebianまたはCentOSを使ったのか？
+> Debianは、依存関係の解決が比較的安定していて、パッケージ管理が簡単だからです。
+
+### DebianとRockyの違いは？
+> Debianはコミュニティ主体で開発された非営利プロジェクトでRockyはRed Hut系のCentOSの後継でRocky社が主体として開発された。前者は自由度の高いパッケージ管理ができてよりユーザーフレンドリーなUIを持ち、豊富なライブラリとファイルシステムと環境に恵まれる。もし、企業向けのサーバーなどを考えるときは、企業向けのサポートが充実している後者を選ぶべき。
+
+### AptitudeとAPTの違いは？
+> - Aptitudeは高レベルのパッケージ管理ツールで、APTは高レベルのパッケージ管理ツールから利用できる低レベルのパッケージ管理ツール。
+> - Aptitudeのほうが賢く使われていないパッケージなどを自動で削除したり依存関係のあるパッケージのインストールのサジェスト機能などを搭載している。
+> - APTはコマンドラインで支持されたとおりにだけ動く。
+
+### AppArmorとは？
+> Linuxのセキュリティシステムで使われているアプリケーション。AppArmorを使うことで、任意のプログラムに対して意図しないファイルやデバイスのアクセスを阻害したり、サブプロセスに対するセキュリティ制約をかけたりできる。「名前ベースの強制アクセス制御で、LSMを用いて実装されている仕組み」と紹介されることがあり、「セキュリティ設定を対象となるファイルパスをもとに設定」される。そのため、「あるファイルパスやそこから起動するプロセスについて、特定の処理・機能を許可する・しない」をプロファイルとして定義できるのがAppArmorの最大の特徴と言える。対して、よく対比されるSELinuxの場合は「ファイルやプロセスのオブジェクトに対して設定としてラベルを適用する」形を取る。つづいて、強制アクセス制御方式（MAC）とは、管理者でさえもファイルやディレクトリの「パーミッション」の設定に「強制的に影響を受ける」仕組み。これに対して管理者であれば何でもできるような仕組みを人アクセス制御方式（DAC）という。
+
+### パスワードポリシー
+> セキュリティを担保するためにある。
+
+### LVMとは
+> Logical Volume Managerのこと。復数のハードディスクやパーティションにまたがった記憶領域を一つのボリュームグループにまとめて単一の論理ボリューム（LV）として扱える機能。
+
+### UFWとは
+> Uncomplicated FireWallと呼び、どのポート番号を閉じ、どのポート番号を開けるかを管理できるツール。セキュリティ対策にもなる。
+
+### SSHとは
+> SSHはSecureなShellのことで遠隔地から暗号化された状態でシェルを操作するメカニズム。
+
+### Cronとは
+> スケジュールされたタスクを自動実行したいときに使われる機能。分、時間、日、月、曜日を指定して、ある間隔ごと、ある日にのように設定してタスクを実行できる。
+> `cd usr/local/bin`にmonitoring.shが保存されている。
+> `sudo crontab -u root -e`でcron jobを編集できる。
+> `change script to */1 * * * * sleep 30s && script path`のように設定すれば、毎分30秒に実行できる。
+
+### Evaluationで使えるコマンド一覧
+```
+sudo ufw status
+sudo systemctl status ssh
+getent group sudo
+getent group user42
+sudo adduser new_user
+sudo groupadd groupname
+sudo usermod -aG groupname username
+sudo chage -l username
+hostnamectl
+hostnamectl set -hostname new_hostname
+sudo nano /etc/hosts
+lsblk
+dpkg -l | grep sudo -
+sudo ufw status numbered
+sudo ufw allow PORT_NUMBER
+sudo ufw delete rule number
+ssh khanadat@127.0.0.1 -p 4242
+```
