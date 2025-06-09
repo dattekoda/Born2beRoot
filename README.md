@@ -341,7 +341,7 @@ sudo groupadd groupname
 sudo usermod -aG groupname username
 sudo chage -l username
 hostnamectl
-hostnamectl set -hostname new_hostname
+hostnamectl set-hostname new_hostname
 sudo nano /etc/hosts
 lsblk
 dpkg -l | grep sudo -
