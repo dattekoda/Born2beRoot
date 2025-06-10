@@ -109,13 +109,13 @@ Ubuntu上の普段使っているターミナルを立ち上げて、`ssh khanad
 もし、失敗したときは一度`rm ~/.ssh/known_hosts`で過去の履歴を削除したあとに`ssh khanadat@127.0.0.1`と入力することでリトライができる。  
 最後に`exit`とターミナルで入力し、SSH接続を終了する。  
 ## パスワードポリシーの変更
-`sudo apt-get install libpam-pwquality`と入力して、Password Quality Checking Libraryをインストールする。
-`sudo vim /etc/pam.d/common-password`と入力。
-`password              requisite                               pam_pwquality.so retry=3`の行を見つけて、以下のようにルールを追加する。
+`sudo apt-get install libpam-pwquality`と入力して、Password Quality Checking Libraryをインストールする。  
+`sudo vim /etc/pam.d/common-password`と入力。  
+`password              requisite                               pam_pwquality.so retry=3`の行を見つけて、以下のようにルールを追加する。  
 
 `password              requisite                               pam_pwquality.so retry=3　minlen=10 ucredit=-1 lcredit=-1 dcredit=-1 maxrepeat=3 reject_username difok=7 enforce_for_root`  
 こうすることで最小の長さを10文字、大文字、小文字、数字が最低1文字ずつ含まれる、同じ文字は最大3文字連続だけ許可、ユーザー名を含むものは禁止、パスワードの新しいものが古いものと少なくとも7文字異なっていなければならない、ルートユーザーにも強制適用となる。  
-保存して、vimを抜ける。
+保存して、vimを抜ける。  
 
 次に`sudo vim /etc/login.defs`を入力する。  
 ここで`PASS_MAX_DAYS 9999 PASS_MIN_DAYS 0 PASS_WARN_AGE 7`の項を見つけて、`PASS_MAX_DAYS 30 PASS_MIN 2 PASS_WARN_AGE 7`のように変更する。  
