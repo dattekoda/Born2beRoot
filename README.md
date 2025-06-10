@@ -13,16 +13,16 @@
 > - apt-getは古くからあるやり方で低レベル。インターフェースは安定しており変わらないことが保証される。helper関数は少ないやり方で味のない出力。
 > - apt はより新しく、高レベルのAPIでdebian 8 / Ubuntu 16.04 で登場した。見やすいUIで進捗バーなどを標準搭載している。またhelper関数も充実。ただ、安定した出力は保証されないため、オートメーション化で使用することは非推奨。
 
-`usermod -aG sudo khanadat`でユーザーをsudo groupに追加できる。
-`getent group sudo`はsudoにいるユーザーを確認するコマンド。
-`sudo visudo`でsudoers fileを編集する。
+`usermod -aG sudo khanadat`でユーザーをsudo groupに追加できる。  
+`getent group sudo`はsudoにいるユーザーを確認するコマンド。  
+`sudo visudo`でsudoers fileを編集する。  
 
 ### `sudoers file`
 > sudoコマンドを使って誰がどのコマンドを実行できるかを定義する設定ファイル。場所は `/etc/sudoers` 、ディレクトリ `/etc/sudoers.d`に細かい設定ファイルを置くことも多い。
 > どのユーザーがどのコマンドを、どのユーザー権限で実行できるかを制御できる。パスワード入力の要不要や、実行ログの保存方法なども設定可能。
 > 直接ファイルを開くのではなく、`visudo`コマンドで編集するように注意する。文法チェックが自動で入るので、誤った設定でシステム管理者権限を失うリスクを減らせる。
 
-最後に、`find - # User privilege specification`の項目を見つけて、`khanadat ALL=(ALL) ALL`とタイプ。これで、khanadatにsudo権限が付与される。
+最後に、`find - # User privilege specification`の項目を見つけて、`khanadat ALL=(ALL) ALL`とタイプ。これで、khanadatにsudo権限が付与される。  
 
 ## Git と Vimのインストール
 `apt-get install git -y`でGitをインストール。
@@ -47,11 +47,11 @@
 > クライアント（ssh)：自分の端末で動くプログラム
 > サーバー（sshd)：接続先で待ち受けるデーモン。通常はTCPのポート番号が22。
 
-`sudo apt install openssh-server`でsshサーバーを管理するパッケージをインストール。
-`sudo sytemctl status ssh`でssh serverの状態を確認できる。
-`sudo vim /etc/ssh/sshd_config`でsshサーバーの設定を編集する。
-`#Port22`の部分を見つけてこの数字を`4242`に変更後、行頭の`#`を削除。
-そして、保存後Vimを抜ける。
+`sudo apt install openssh-server`でsshサーバーを管理するパッケージをインストール。  
+`sudo sytemctl status ssh`でssh serverの状態を確認できる。  
+`sudo vim /etc/ssh/sshd_config`でsshサーバーの設定を編集する。  
+`#Port22`の部分を見つけてこの数字を`4242`に変更後、行頭の`#`を削除。  
+そして、保存後Vimを抜ける。  
 
 ### TCP/IPとは
 インターネットやLAN上でコンピュータ同士がデータをやり取りするためのプロトコル（通信規約）の一郡のこと。正式名称は「Transmission Control Protocol/ Internet Protocol」。大きく４つのレイヤーに分かれる。
@@ -89,24 +89,25 @@
 > しかし、iptablesはその自由度と機能の豊富さから、設定を行うのに専門の知識が必要になる。少なくともいきなりiptablesを利用して自由自在に設定を行うことは困難となる。なぜならその設定は根本的な部分から行うことができ非常に複雑になるから。
 > そこでufw（Uncomplicated FireWall）を使うことでソフトウェアファイアウォールとしての機能を、できるだけ単純なインターフェースで設定できる。
 
-`apt-get install ufw`でまず最初にUFWをインストールする。
-`sudo ufw enable`でUFWを有効化する。
-`sudo ufw status numbered`でUFWの状態を確認できる。
-`sudo ufw allow ssh`で、ルールを設定できる。このときsshの通信が許可される。
-`sudo ufw allow 4242`でポート番号4242の通信が許可される。
-※同様に、`sudo ufw delete 1`でルール1を削除できる。
-`sudo ufw status numbered`でもう一度確認するとルールが追加されているはず。
-22/tcp: IPv4、22/tcp: IPv6の意味。
+`apt-get install ufw`でまず最初にUFWをインストールする。  
+`sudo ufw enable`でUFWを有効化する。  
+`sudo ufw status numbered`でUFWの状態を確認できる。  
+`sudo ufw allow ssh`で、ルールを設定できる。このときsshの通信が許可される。  
+`sudo ufw allow 4242`でポート番号4242の通信が許可される。  
+※同様に、`sudo ufw delete 1`でルール1を削除できる。  
+`sudo ufw status numbered`でもう一度確認するとルールが追加されているはず。  
+22/tcp: IPv4、22/tcp: IPv6の意味。  
+
 ## SSH接続の実行
 オラクルのVirtualBoxマネージャーを開き、実行中のOSを選択→設定からネットワーク、高度を選択、ポートフォワーディングを選んで、右上の＋ボタンからルールを追加
 
-下表のようにルールを設定したら、Virtual Machine上に戻る。
+下表のようにルールを設定したら、Virtual Machine上に戻る。  
 ![](image.png)
-`sudo systemctl restart ssh`でSSH Serverを再起動する。　
-`sudo service sshd status`でSSHの状態を確認する。
-Ubuntu上の普段使っているターミナルを立ち上げて、`ssh khanadat@127.0.0.1 -p 4242`と入力して、SSH接続する。yesと入力後に過去に設定したユーザーパスワードを入力してアクセスする。
-もし、失敗したときは一度`rm ~/.ssh/known_hosts`で過去の履歴を削除したあとに`ssh khanadat@127.0.0.1`と入力することでリトライができる。
-最後に`exit`とターミナルで入力し、SSH接続を終了する。
+`sudo systemctl restart ssh`でSSH Serverを再起動する。　  
+`sudo service sshd status`でSSHの状態を確認する。  
+Ubuntu上の普段使っているターミナルを立ち上げて、`ssh khanadat@127.0.0.1 -p 4242`と入力して、SSH接続する。yesと入力後に過去に設定したユーザーパスワードを入力してアクセスする。  
+もし、失敗したときは一度`rm ~/.ssh/known_hosts`で過去の履歴を削除したあとに`ssh khanadat@127.0.0.1`と入力することでリトライができる。  
+最後に`exit`とターミナルで入力し、SSH接続を終了する。  
 ## パスワードポリシーの変更
 `sudo apt-get install libpam-pwquality`と入力して、Password Quality Checking Libraryをインストールする。
 `sudo vim /etc/pam.d/common-password`と入力。
@@ -116,9 +117,9 @@ Ubuntu上の普段使っているターミナルを立ち上げて、`ssh khanad
 こうすることで最小の長さを10文字、大文字、小文字、数字が最低1文字ずつ含まれる、同じ文字は最大3文字連続だけ許可、ユーザー名を含むものは禁止、パスワードの新しいものが古いものと少なくとも7文字異なっていなければならない、ルートユーザーにも強制適用となる。
 保存して、vimを抜ける。
 
-次に`sudo vim /etc/login.defs`を入力する。
-ここで`PASS_MAX_DAYS 9999 PASS_MIN_DAYS 0 PASS_WARN_AGE 7`の項を見つけて、`PASS_MAX_DAYS 30 PASS_MIN 0 PASS_WARN_AGE 7`のように変更する。
-最後に、`reboot`で、設定が適用されるように再起動する。
+次に`sudo vim /etc/login.defs`を入力する。  
+ここで`PASS_MAX_DAYS 9999 PASS_MIN_DAYS 0 PASS_WARN_AGE 7`の項を見つけて、`PASS_MAX_DAYS 30 PASS_MIN 0 PASS_WARN_AGE 7`のように変更する。  
+最後に、`reboot`で、設定が適用されるように再起動する。  
 ## グループの作成
 ### グループとは
 復数のユーザーをまとめてファイルやデバイスへのアクセス権を管理する仕組み。
@@ -139,25 +140,25 @@ sudo usermod -aG グループ名 ユーザー名
 sudo groupdel グループ名
 ```
 
-`sudo groupadd user42`でグループを追加
-`sudo groupadd evaluating`で評価グループを作成
-最後に、`getent group`でグループが作成されたかどうかを確認する。
+`sudo groupadd user42`でグループを追加  
+`sudo groupadd evaluating`で評価グループを作成  
+最後に、`getent group`でグループが作成されたかどうかを確認する。  
 
 ## ユーザーを作成し、グループに配属する。
-`cut -d: -f1 /etc/passwd`でローカルユーザーを確認する。
-`sudo adduser new_username`でユーザーを追加して、パスワードを以前設定したルールに則った形で登録する。
-`sudo usermod -aG user42 khanadat`で自分のユーザーを`user42`に登録する。
-`sudo usermod -aG evaluating new_username`で追加したユーザーを`evaluating`グループに追加する。
-`getent group user42`、`getent group evaluating`でグループ情報を確認する。
-`groups khanadat`、`groups new_username`でユーザーがどのグループに属しているかを確認する。
-最後に`chage -l new_username`でパスワードルールがそのユーザーで有効化されているか確認する。
-`su - new_username`でそのユーザーにログインできる。
+`cut -d: -f1 /etc/passwd`でローカルユーザーを確認する。  
+`sudo adduser new_username`でユーザーを追加して、パスワードを以前設定したルールに則った形で登録する。  
+`sudo usermod -aG user42 khanadat`で自分のユーザーを`user42`に登録する。  
+`sudo usermod -aG evaluating new_username`で追加したユーザーを`evaluating`グループに追加する。  
+`getent group user42`、`getent group evaluating`でグループ情報を確認する。  
+`groups khanadat`、`groups new_username`でユーザーがどのグループに属しているかを確認する。  
+最後に`chage -l new_username`でパスワードルールがそのユーザーで有効化されているか確認する。  
+`su - new_username`でそのユーザーにログインできる。  
 
 ## sudoersグループの設定
-`cd ~/../../`でディレクトを移動する。
-`cd var/log`に移動
-`makedir sudo`からsudoディレクトリを作成する。（もし既にあれば、それをそのまま使う）
-`cd sudo && touch sudo.log`でsudo.logファイルを作成する。
+`cd ~/../../`でディレクトを移動する。  
+`cd var/log`に移動  
+`makedir sudo`からsudoディレクトリを作成する。（もし既にあれば、それをそのまま使う）  
+`cd sudo && touch sudo.log`でsudo.logファイルを作成する。  
 
 ### sudo.logファイル
 > sudoのコマンド実行ログ（いつ誰が何を実行したか）をこのファイルに書き込む。
@@ -278,21 +279,21 @@ wall "  #Architecture: $arc
  続いて、Ubuntuのshellから`ssh khanadat@127.0.0.1 -p 4242`でSSH接続をする。
 
 ### `ssh khanadat@127.0.0.1 -p 4242`とは
-> ローカルホスト(127.0.0.1)に指定してユーザー名をkhanadatにして認証を行うことを意味する。`-p 4242`でポート番号を4242に指定している。
-ログインできたら、`cd usr/local/bin`を叩く。
-`nano monitoring.sh`で`monitoring.sh`に先程のコマンド全てをそのままペーストする。
-保存ができたらnanoを抜けて、`exit`を叩いてSSHから切断する。
+> ローカルホスト(127.0.0.1)に指定してユーザー名をkhanadatにして認証を行うことを意味する。`-p 4242`でポート番号を4242に指定している。  
+ログインできたら、`cd usr/local/bin`を叩く。  
+`nano monitoring.sh`で`monitoring.sh`に先程のコマンド全てをそのままペーストする。  
+保存ができたらnanoを抜けて、`exit`を叩いてSSHから切断する。  
 
 VirtualBoxに戻り、`sudo visumo`からsudoersファイルを編集する。
-`%sudo ALL=(ALL:ALL) ALL`の行を見つけたらその真下に
-`khanadat ALL=(ALL) NOPASSWD: /usr/local/bin/monitoring.sh`のように追加する。
-> これは`ALL`どのホストからの実行でもこの設定を有効にして`(ALL)`どのユーザーに対しても実行しても良く、`NOPASSWD`sudo実行時にパスワード質問をスキップして`/usr/local/bin/monitoring.sh`このスクリプトだけパスワード無しで実行を許可するという意味。
-そしたら、保存して、sudoersファイルを抜ける。
-`sudo reboot`でVirtualBoxを再起動して、`sudo /usr/local/bin/monitoring.sh`から.shファイルを実行テストする。
+`%sudo ALL=(ALL:ALL) ALL`の行を見つけたらその真下に  
+`khanadat ALL=(ALL) NOPASSWD: /usr/local/bin/monitoring.sh`のように追加する。  
+> これは`ALL`どのホストからの実行でもこの設定を有効にして`(ALL)`どのユーザーに対しても実行しても良く、`NOPASSWD`sudo実行時にパスワード質問をスキップして`/usr/local/bin/monitoring.sh`このスクリプトだけパスワード無しで実行を許可するという意味。  
+そしたら、保存して、sudoersファイルを抜ける。  
+`sudo reboot`でVirtualBoxを再起動して、`sudo /usr/local/bin/monitoring.sh`から.shファイルを実行テストする。  
 
-`sudo crontab -u root -e`でcrontabを開いて、ルールを追加する。
-crontabの最後の行に`*/10 * * * * /usr/local/bin/monitoring.sh`を追加する。
-これは10分ごとにmonitoring.shを実行するという意味。
+`sudo crontab -u root -e`でcrontabを開いて、ルールを追加する。  
+crontabの最後の行に`*/10 * * * * /usr/local/bin/monitoring.sh`を追加する。  
+これは10分ごとにmonitoring.shを実行するという意味。  
 
 ## 質問対策
 ### 仮想マシンはどう動くのか？その目的は？
