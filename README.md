@@ -102,7 +102,7 @@
 オラクルのVirtualBoxマネージャーを開き、実行中のOSを選択→設定からネットワーク、高度を選択、ポートフォワーディングを選んで、右上の＋ボタンからルールを追加
 
 下表のようにルールを設定したら、Virtual Machine上に戻る。  
-![](image.png)
+![](image.png)  
 `sudo systemctl restart ssh`でSSH Serverを再起動する。　  
 `sudo service sshd status`でSSHの状態を確認する。  
 Ubuntu上の普段使っているターミナルを立ち上げて、`ssh khanadat@127.0.0.1 -p 4242`と入力して、SSH接続する。yesと入力後に過去に設定したユーザーパスワードを入力してアクセスする。  
