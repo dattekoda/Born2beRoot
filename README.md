@@ -4,10 +4,10 @@
 
 ## sudo設定
 
-`su -`でroot userとしてログインする。
-`apt-get update -y`でそれまでダウンロードしたパッケージ情報をアップデート。
-`apt-get upgrade -y`でアップデートした情報を獲得。
-`apt install sudo`でsudoをインストール。
+`su -`でroot userとしてログインする。  
+`apt-get update -y`でそれまでダウンロードしたパッケージ情報をアップデート。  
+`apt-get upgrade -y`でアップデートした情報を獲得。  
+`apt install sudo`でsudoをインストール。  
 
 ### apt と apt-get の違い。
 > - apt-getは古くからあるやり方で低レベル。インターフェースは安定しており変わらないことが保証される。helper関数は少ないやり方で味のない出力。
