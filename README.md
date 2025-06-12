@@ -4,7 +4,7 @@
 
 ## sudo設定
 
-`su -`でroot userとしてログインする。  
+`su`でroot userとしてログインする。  
 `apt-get update -y`でそれまでダウンロードしたパッケージ情報をアップデート。  
 `apt-get upgrade -y`でアップデートした情報を獲得。  
 `apt install sudo`でsudoをインストール。  
