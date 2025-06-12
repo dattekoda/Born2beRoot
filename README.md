@@ -234,7 +234,7 @@ cpul=$(top -bn1 | grep '^%Cpu' | awk -F',' '{print $4}' | awk '{printf("%.1f%%")
 
 ## monitoring.shの設定2
 ```
-lb=$(who -b | awk '$1=="system" {print $3 " " $4}')
+lb=$(uptime -s)
 lvmu=$(if [ $(lsblk | awk '{print $6}' | grep "lvm" | wc -l) -eq 0 ]; then echo no; else echo yes; fi)
 ctcp=$(ss -Ht state established | wc -l)
 ulog=$(users | wc -w)
