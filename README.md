@@ -187,12 +187,12 @@ Defaults  requiretty
 
 ## Crontabの構成
 ### Crontabとは
-> cronジョブ実行のほかに、編集、リスト、除去を行う。cronジョブとは、cronデーモンによってスケジュールされ、一定の周期で実行されるジョブ。etc/ctontabファイルにタスクの周期などの情報を保存する。
-`apt-get install -y net-tools`でnetstat tools(ネットワークの接続状態や統計を表示するコマンド群)をインストールする。
-`cd /usr/local/bin/`を叩く。
-`touch monitoring.sh`で.shファイルを作成。
-最後に`chmod 777 monitoring.sh`で権限を設定する。
-777は全権限を付与するという意味。（オーナー、グループ、その他に対してread, write, execute)
+> cronジョブ実行のほかに、編集、リスト、除去を行う。cronジョブとは、cronデーモンによってスケジュールされ、一定の周期で実行されるジョブ。etc/ctontabファイルにタスクの周期などの情報を保存する。  
+`apt-get install -y net-tools`でnetstat tools(ネットワークの接続状態や統計を表示するコマンド群)をインストールする。  
+`cd /usr/local/bin/`を叩く。  
+`touch monitoring.sh`で.shファイルを作成。  
+最後に`chmod 777 monitoring.sh`で権限を設定する。  
+777は全権限を付与するという意味。（オーナー、グループ、その他に対してread, write, execute)  
 
 ## monitoring.shの設定
 ```
@@ -206,7 +206,7 @@ pram=$(free | awk '$1 == "Mem:" {printf("%.2f"), $3/$2*100}')
 fdisk=$(df -BG | grep '^/dev/' | grep -v '/boot$' | awk '{ft += $2} END {print ft}')
 udisk=$(df -BM | grep '^/dev/' | grep -v '/boot$' | awk '{ut += $3} END {print ut}')
 pdisk=$(df -BM | grep '^/dev/' | grep -v '/boot$' | awk '{ft += $2} {ut += $3} END {printf("%d"), ut/ft*100}')
-cpul=$(top -bn1 | grep '^%Cpu' | awk '{printf("%.1f%%"), $1 + $3}')
+cpul=$(top -bn1 | grep '^%Cpu' | awk -F',' '{print $4}' | awk '{printf("%.1f%%"), 100.0 - $1}')
 ```
 ### パイプ
 > パイプとは `|` のこと。左の出力が入力として入ってきて右に入力として受け流されるイメージ。関数A→（出力A）→|→（入力B）→関数B
