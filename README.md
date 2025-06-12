@@ -284,10 +284,10 @@ wall "  #Architecture: $arc
 `nano monitoring.sh`で`monitoring.sh`に先程のコマンド全てをそのままペーストする。  
 保存ができたらnanoを抜けて、`exit`を叩いてSSHから切断する。  
 
-VirtualBoxに戻り、`sudo visumo`からsudoersファイルを編集する。
+VirtualBoxに戻り、`sudo visudo`からsudoersファイルを編集する。
 `%sudo ALL=(ALL:ALL) ALL`の行を見つけたらその真下に  
-`khanadat ALL=(ALL) NOPASSWD: /usr/local/bin/monitoring.sh`のように追加する。  
-> これは`ALL`どのホストからの実行でもこの設定を有効にして`(ALL)`どのユーザーに対しても実行しても良く、`NOPASSWD`sudo実行時にパスワード質問をスキップして`/usr/local/bin/monitoring.sh`このスクリプトだけパスワード無しで実行を許可するという意味。  
+`khanadat ALL=(root) NOPASSWD: /usr/local/bin/monitoring.sh`のように追加する。  
+> ユーザーkhanadatは、このマシン上で`/usr/local/bin/monitoring.sh`というスクリプトを`root`権限で実行できる。その際パスワード入力は不要であるという意味。  
 そしたら、保存して、sudoersファイルを抜ける。  
 `sudo reboot`でVirtualBoxを再起動して、`sudo /usr/local/bin/monitoring.sh`から.shファイルを実行テストする。  
 
