@@ -171,7 +171,7 @@ sudo groupdel グループ名
 Defaults  env_reset
 Defaults  mail_badpass
 Defaults  secure_path="/usr/local/sbin:/usr/local/bin:/usr/bin:/sbin:/bin"
-Defaults  badpass_message="Password is uncorrect. Please try again!"
+Defaults  badpass_message="Password is incorrect. Please try again!"
 Defaults  passwd_tries=3
 Defaults  logfile="/var/log/sudo/sudo.log"
 Defaults  log_input, log_output
