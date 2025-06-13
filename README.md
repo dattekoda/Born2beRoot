@@ -53,6 +53,8 @@
 `sudo sytemctl status ssh`でssh serverの状態を確認できる。  
 `sudo vim /etc/ssh/sshd_config`でsshサーバーの設定を編集する。  
 `#Port22`の部分を見つけてこの数字を`4242`に変更後、行頭の`#`を削除。  
+`#PermitRootLogin `の部分を見つけて`PermitRootLogin no`とする。　　
+こうすることで、ssh接続時のrootログインを防ぐのでセキュリティ上のリスクを排除できる。
 そして、保存後Vimを抜ける。  
 
 ### TCP/IPとは
@@ -209,14 +211,14 @@ iolog_dir        The top-level directory to use when constructing the path name 
 ```
 #!/bin/bash
 arc=$(uname -a)
-pcpu=$(grep "physical id" /proc/cpuinfo | sort | uniq | wc -l)
-vcpu=$(grep "^processor" /proc/cpuinfo | wc -l)
+pcpu=$(grep "physical id" /proc/cpuinfo | sort -u | wc -l)
+vcpu=$(nproc)
 fram=$(free -m | awk '$1 == "Mem:" {print $2}')
 uram=$(free -m | awk '$1 == "Mem:" {print $3}')
 pram=$(free | awk '$1 == "Mem:" {printf("%.2f"), $3/$2*100}')
-fdisk=$(df -BG | grep '^/dev/' | grep -v '/boot$' | awk '{ft += $2} END {print ft}')
-udisk=$(df -BM | grep '^/dev/' | grep -v '/boot$' | awk '{ut += $3} END {print ut}')
-pdisk=$(df -BM | grep '^/dev/' | grep -v '/boot$' | awk '{ft += $2} {ut += $3} END {printf("%d"), ut/ft*100}')
+fdisk=$(df -BG | grep '^/dev/' | awk '{ft += $2} END {print ft}')
+udisk=$(df -BM | grep '^/dev/' | awk '{ut += $3} END {print ut}')
+pdisk=$(df -BM | grep '^/dev/' | awk '{ft += $2} {ut += $3} END {printf("%d"), ut/ft*100}')
 cpul=$(top -bn1 | grep '^%Cpu' | awk -F',' '{print $4}' | awk '{printf("%.1f%%"), 100.0 - $1}')
 ```
 ### パイプ
@@ -265,8 +267,9 @@ wall "  #Architecture: $arc
         #Network: IP $ip ($mac)
         #Sudo: $cmds cmd"
 ```
-### `who`コマンド
-> いまシステムにログインしているユーザー情報を表示するシンプルなLinux/Unix コマンド。主に`var/log/utmp`（ユーザーのログイン記録ファイル）を読んで、一行につき1セッションずつ出力する。おもな表示項目はユーザー名、端末、ログイン日時、リモートホストなど。`-b`オプションで最後のシステム起動時刻（ブート時刻）を表示する。
+
+### `uptime -s`コマンド
+かんたんなやつ
 
 ### `ss`コマンド
 > "socket statistics"の略でシステム上のネットワークソケットの状態や統計情報を表示するツール。以前よく使われていた`netstat`の代替としてより高速かつ詳細な情報を得られるようになっている。`-t`オプションでTCPソケット情報のみを得る。`-H`オプションで、ヘッダーを省略する。
