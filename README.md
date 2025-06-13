@@ -18,7 +18,7 @@
 
 `gpasswd -a khanadat sudo`でユーザーをsudo groupに追加できる。  
 `usermod -aG sudo khanadat`でもユーザーをsudo groupに追加できる。 
-→これもできるが、タイポして`usermod -a sudo khanadat`でkhanadat以外のsudo groupのユーザーがいなくなる可能性があるため危険。
+→これもできるが、タイポして`usermod -a sudo khanadat`でkhanadat以外のsudo groupのユーザーがいなくなる可能性があるため危険。　　
 `getent group sudo`はsudoにいるユーザーを確認するコマンド。  
 `sudo visudo`でsudoers fileを編集する。  
 
