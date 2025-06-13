@@ -20,14 +20,11 @@
 `usermod -aG sudo khanadat`でもユーザーをsudo groupに追加できる。 
 →これもできるが、タイポして`usermod -a sudo khanadat`でkhanadat以外のsudo groupのユーザーがいなくなる可能性があるため危険。　　
 `getent group sudo`はsudoにいるユーザーを確認するコマンド。  
-`sudo visudo`でsudoers fileを編集する。  
 
 ### `sudoers file`
 > sudoコマンドを使って誰がどのコマンドを実行できるかを定義する設定ファイル。場所は `/etc/sudoers` 、ディレクトリ `/etc/sudoers.d`に細かい設定ファイルを置くことも多い。
 > どのユーザーがどのコマンドを、どのユーザー権限で実行できるかを制御できる。パスワード入力の要不要や、実行ログの保存方法なども設定可能。
 > 直接ファイルを開くのではなく、`visudo`コマンドで編集するように注意する。文法チェックが自動で入るので、誤った設定でシステム管理者権限を失うリスクを減らせる。
-
-最後に、`find - # User privilege specification`の項目を見つけて、`khanadat ALL=(ALL) ALL`とタイプ。これで、khanadatにsudo権限が付与される。  
 
 ## Git と Vimのインストール
 `apt-get install git -y`でGitをインストール。
