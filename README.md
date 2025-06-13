@@ -174,7 +174,6 @@ Defaults  secure_path="/usr/local/sbin:/usr/local/bin:/usr/bin:/sbin:/bin"
 Defaults  badpass_message="Password is incorrect. Please try again!"
 Defaults  passwd_tries=3
 Defaults  logfile="/var/log/sudo/sudo.log"
-Defaults  log_input, log_output
 Defaults  requiretty
 ```
 ### 以下説明
@@ -184,8 +183,9 @@ Defaults  requiretty
 > - `badpass_message="Pass...`:  パスワードが間違っていたときに表示するメッセージ。デフォルトは"Sorry, try again"
 > - `passwd_tries=3`: パスワードを3回間違えたらsudoを打ち切られる。総当たり攻撃を遅らせる効果がある。
 > - `logfile="/var...`: いつ・誰が・どんなコマンドを実行したかを全部sudo.logに残す。後でトラブル調査や監査ができるようにする。
-> - `log_input, log_output`: sudo実行中の入力と出力をまるごと記録する。誰がなにをしたのか、内容までを後から再現できるので強力な監査機能と言える。
 > - `requiretty`: sudoは「実際の端末」からしか使えない。cronやスクリプトの中などTTY（接続先端末）がない環境ではsudoを禁止する設定。人間が直接ターミナルで叩いたときだけsudoが動くので、勝手な自動実行を防げる。
+> - デフォルトでは`/var/log/sudo-io`にすべてのログの履歴が残ってるのでそのログを`/var/log/sudo`に保存されるように書き換えるのが本問の本質。
+> - ちなみに中身はzipファイルのことがあるがそれを解凍して参照するコマンドが`zcat ttyout`コマンドのように打つ。
 
 ## Crontabの構成
 ### Crontabとは
