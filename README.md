@@ -353,3 +353,15 @@ sudo ufw allow PORT_NUMBER
 sudo ufw delete rule number
 ssh khanadat@127.0.0.1 -p 4242
 ```
+
+### `/etc/profile`とは
+```
+if [ "$(id -u)" -eq 0 ]; then
+        PATH="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
+else
+        PATH="/usr/local/bin:/usr/bin:/bin:/usr/local/games:/usr/games"
+fi
+export PATH
+```
+これが中身。idが0、つまりrootのときにこれらの`PATH`に収められているコマンドたちの利用が許可されるという意味。　　
+もし`root`でいるのに`sudo`をいれないと使えないコマンドがあると言われたときは`source /etc/profile`でrootにprofileの設定を適用することで問題が解消される。  
