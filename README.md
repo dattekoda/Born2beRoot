@@ -16,7 +16,9 @@
 ### aptitude
 > - 高レベルのパッケージ管理ツール。依存関係を解消する便利な機能を搭載する。古くからあるツールでaptより前から存在する。
 
-`usermod -aG sudo khanadat`でユーザーをsudo groupに追加できる。  
+`gpasswd -a khanadat sudo`でユーザーをsudo groupに追加できる。  
+`usermod -aG sudo khanadat`でもユーザーをsudo groupに追加できる。 
+→これもできるが、タイポして`usermod -a sudo khanadat`でkhanadat以外のsudo groupのユーザーがいなくなる可能性があるため危険。
 `getent group sudo`はsudoにいるユーザーを確認するコマンド。  
 `sudo visudo`でsudoers fileを編集する。  
 
