@@ -4,7 +4,7 @@
 
 ## sudo設定
 
-`su`でroot userとしてログインする。  
+`sudo su`でroot userとしてログインする。  
 `apt-get update -y`でそれまでダウンロードしたパッケージ情報をアップデート。  
 `apt-get upgrade -y`でアップデートした情報を獲得。  
 `apt install sudo`でsudoをインストール。  
@@ -18,7 +18,7 @@
 
 `gpasswd -a khanadat sudo`でユーザーをsudo groupに追加できる。  
 `usermod -aG sudo khanadat`でもユーザーをsudo groupに追加できる。 
-→これもできるが、タイポして`usermod -a sudo khanadat`でkhanadat以外のsudo groupのユーザーがいなくなる可能性があるため危険。　　
+→これもできるが、タイポして`usermod -a sudo khanadat`でkhanadat以外のsudo groupのユーザーがいなくなる可能性があるため危険。  　
 `getent group sudo`はsudoにいるユーザーを確認するコマンド。  
 
 ### `sudoers file`
@@ -54,7 +54,7 @@
 `sudo vim /etc/ssh/sshd_config`でsshサーバーの設定を編集する。  
 `#Port22`の部分を見つけてこの数字を`4242`に変更後、行頭の`#`を削除。  
 `#PermitRootLogin `の部分を見つけて`PermitRootLogin no`とする。　　
-こうすることで、ssh接続時のrootログインを防ぐのでセキュリティ上のリスクを排除できる。
+こうすることで、ssh接続時のrootログインを防ぐのでセキュリティ上のリスクを減らせる。  
 そして、保存後Vimを抜ける。  
 
 ### TCP/IPとは
@@ -137,9 +137,7 @@ Ubuntu上の普段使っているターミナルを立ち上げて、`ssh khanad
 #グループ作成
 sudo groupadd GROUP_NAME
 #ユーザーをグループに追加
-sudo adduser ユーザー名 グループ名
-#または
-sudo usermod -aG グループ名 ユーザー名
+sudo gpasswd -a ユーザー名 グループ名
 #グループ削除
 sudo groupdel グループ名
 ```
@@ -151,8 +149,8 @@ sudo groupdel グループ名
 ## ユーザーを作成し、グループに配属する。
 `cut -d: -f1 /etc/passwd`でローカルユーザーを確認する。  
 `sudo adduser new_username`でユーザーを追加して、パスワードを以前設定したルールに則った形で登録する。  
-`sudo usermod -aG user42 khanadat`で自分のユーザーを`user42`に登録する。  
-`sudo usermod -aG evaluating new_username`で追加したユーザーを`evaluating`グループに追加する。  
+`sudo gpasswd -a khanadat user42`で自分のユーザーを`user42`に登録する。  
+`sudo gpasswd -a khanadat evaluating`で追加したユーザーを`evaluating`グループに追加する。  
 `getent group user42`、`getent group evaluating`でグループ情報を確認する。  
 `groups khanadat`、`groups new_username`でユーザーがどのグループに属しているかを確認する。  
 最後に`chage -l new_username`でパスワードルールがそのユーザーで有効化されているか確認する。  
@@ -176,7 +174,8 @@ Defaults  secure_path="/usr/local/sbin:/usr/local/bin:/usr/bin:/sbin:/bin"
 Defaults  badpass_message="Password is incorrect. Please try again!"
 Defaults  passwd_tries=3
 Defaults  iolog_dir="/var/log/sudo"
-Defaults  log_input, log_output
+Defaults  log_input
+Defaults  log_output
 Defaults  logfile="/var/log/sudo/sudo.log"
 Defaults  requiretty
 ```
@@ -298,13 +297,6 @@ wall "  #Architecture: $arc
 `nano monitoring.sh`で`monitoring.sh`に先程のコマンド全てをそのままペーストする。  
 保存ができたらnanoを抜けて、`exit`を叩いてSSHから切断する。  
 
-VirtualBoxに戻り、`sudo visudo`からsudoersファイルを編集する。
-`%sudo ALL=(ALL:ALL) ALL`の行を見つけたらその真下に  
-`khanadat ALL=(root) NOPASSWD: /usr/local/bin/monitoring.sh`のように追加する。  
-> ユーザーkhanadatは、このマシン上で`/usr/local/bin/monitoring.sh`というスクリプトを`root`権限で実行できる。その際パスワード入力は不要であるという意味。  
-そしたら、保存して、sudoersファイルを抜ける。  
-`sudo reboot`でVirtualBoxを再起動して、`sudo /usr/local/bin/monitoring.sh`から.shファイルを実行テストする。  
-
 `sudo crontab -u root -e`でcrontabを開いて、ルールを追加する。  
 crontabの最後の行に`*/10 * * * * /usr/local/bin/monitoring.sh`を追加する。  
 これは10分ごとにmonitoring.shを実行するという意味。  
@@ -367,6 +359,8 @@ ssh khanadat@127.0.0.1 -p 4242
 ```
 
 ### `/etc/profile`とは
+`su`でrootにログインするとプロファイルの適用がされない。  
+このときにパスが通らないため、sudoを打たないとsudo権限が必要なコマンドが使えなくなる。
 ```
 if [ "$(id -u)" -eq 0 ]; then
         PATH="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
@@ -377,3 +371,17 @@ export PATH
 ```
 これが中身。idが0、つまりrootのときにこれらの`PATH`に収められているコマンドたちの利用が許可されるという意味。  
 もし`root`でログインしているのに`sudo`をいれないと使えないコマンドがあるとエラーが出たときは`source /etc/profile`でrootにprofileの設定を適用することで問題が解消される。  
+
+
+## Git serverの立て方。
+参照：https://wiki.archlinux.org/title/Git_server#SSH
+`which git`でgitがインストールされていない場合は`apt-get update -y`、`apt-get upgrade -y`を叩いて依存関係を解消したあとに、`apt-get install git`でgitをインストールする。　　
+rootではないユーザーでログインして、`git init --bare ~/foo`でfooという空のまっさらなリポジトリを作成できる。  
+`git clone ssh://khanadat@localhost:4242/~/foo confirm`  
+上記のコマンドを自身のterminal上で打つことで`virtual machine`上のgit serverからクローンできる。
+それらを通常のgitのように扱うことができる。  
+## virtual machine上で中身を確認する方法  
+`cd ~/foo`でディレクトリを移動したあとに  
+`git worktree add master`: このコマンドはmasterブランチの中身をいまいるディレクトリ上にディレクトリとして表示するコマンド
+そこに`master`ディレクトリができたことは確認できると思う。中身も確認するとpushされたファイルが格納されているはず。  
+`git worktree remove master`: このコマンドはworktreeとmasterをディレクトリとして削除するコマンド。  
