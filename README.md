@@ -53,7 +53,7 @@
 `sudo sytemctl status ssh`でssh serverの状態を確認できる。  
 `sudo vim /etc/ssh/sshd_config`でsshサーバーの設定を編集する。  
 `#Port22`の部分を見つけてこの数字を`4242`に変更後、行頭の`#`を削除。  
-`#PermitRootLogin `の部分を見つけて`PermitRootLogin no`とする。　　
+`#PermitRootLogin `の部分を見つけて`PermitRootLogin no`とする。  
 こうすることで、ssh接続時のrootログインを防ぐのでセキュリティ上のリスクを減らせる。  
 そして、保存後Vimを抜ける。  
 
