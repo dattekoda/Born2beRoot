@@ -188,9 +188,7 @@ Defaults  requiretty
 > - `passwd_tries=3`: パスワードを3回間違えたらsudoを打ち切られる。総当たり攻撃を遅らせる効果がある。
 > - `iolog_dir="/var/log/sudo`: sudoが実行されたときのすべてのログファイルはデフォルトで`sudo-io`ディレクトリに保存される。
 > - man sudoers内の説明:
-```
 iolog_dir        The top-level directory to use when constructing the path name for the input/output log directory.  Only used if the log_input or log_output options are enabled or when the LOG_INPUT or LOG_OUTPUT tags are present for a command.  The session sequence number, if any, is stored in the directory.  The default is /var/log/sudo-io.
-```
 > - sudo-ioに保存される情報はどういったコマンドが実行されたかのログや実行された時間が記録されている。また、そのアウトプットはzip形式で保存されていて`zcat`で中身を参照できる。
 > - `logfile="/var...`: いつ・誰が・どんなコマンドを実行したかを全部sudo.logに残す。後でトラブル調査や監査ができるようにする。
 > - `requiretty`: sudoは「実際の端末」からしか使えない。cronやスクリプトの中などTTY（接続先端末）がない環境ではsudoを禁止する設定。人間が直接ターミナルで叩いたときだけsudoが動くので、勝手な自動実行を防げる。
