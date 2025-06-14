@@ -372,7 +372,7 @@ export PATH
 
 
 ## Git serverの立て方。
-参照：https://wiki.archlinux.org/title/Git_server#SSH
+参照：https://wiki.archlinux.org/title/Git_server#SSH  
 `which git`でgitがインストールされていない場合は`apt-get update -y`、`apt-get upgrade -y`を叩いて依存関係を解消したあとに、`apt-get install git`でgitをインストールする。　　
 rootではないユーザーでログインして、`git init --bare ~/foo`でfooという空のまっさらなリポジトリを作成できる。  
 `git clone ssh://khanadat@localhost:4242/~/foo confirm`  
@@ -380,6 +380,6 @@ rootではないユーザーでログインして、`git init --bare ~/foo`でfo
 それらを通常のgitのように扱うことができる。  
 ## virtual machine上で中身を確認する方法  
 `cd ~/foo`でディレクトリを移動したあとに  
-`git worktree add master`: このコマンドはmasterブランチの中身をいまいるディレクトリ上にディレクトリとして表示するコマンド
+`git worktree add master`: このコマンドはmasterブランチの中身を今いるディレクトリ上に確認用として追加するコマンド  
 そこに`master`ディレクトリができたことは確認できると思う。中身も確認するとpushされたファイルが格納されているはず。  
 `git worktree remove master`: このコマンドはworktreeとmasterをディレクトリとして削除するコマンド。  
