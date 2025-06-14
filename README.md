@@ -376,7 +376,7 @@ export PATH
 `which git`でgitがインストールされていない場合は`apt-get update -y`、`apt-get upgrade -y`を叩いて依存関係を解消したあとに、`apt-get install git`でgitをインストールする。　　
 rootではないユーザーでログインして、`git init --bare ~/foo`でfooという空のまっさらなリポジトリを作成できる。  
 `git clone ssh://khanadat@localhost:4242/~/foo confirm`  
-上記のコマンドを自身のterminal上で打つことで`virtual machine`上のgit serverからクローンできる。
+上記のコマンドを自身のterminal上で打つことで`virtual machine`上のgit serverからクローンできる。  
 それらを通常のgitのように扱うことができる。  
 ## virtual machine上で中身を確認する方法  
 `cd ~/foo`でディレクトリを移動したあとに  
